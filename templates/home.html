@@ -9,6 +9,16 @@
   </head>
   <body>
 
+    <div class="toolbar">
+      <label for="sort-select">
+        Sort by
+      </label>
+      <select id="sort-select" class="sort-dropdown">
+        <option value="title" {% if sort == "title" %}selected{% endif %}>Title</option>
+        <option value="author" {% if sort == "author" %}selected{% endif %}>Author</option>
+      </select>
+    </div>
+
     <div class="book-grid">
       {% for book in books %}
         <div class="book_card">
@@ -19,5 +29,10 @@
       {% endfor %}
 
   </div>
+  <script>
+    document.getElementById('sort-select').addEventListener('change', function() {
+      window.location.href = '/?sort=' + this.value;
+    });
+  </script>
   </body>
 </html>

@@ -19,23 +19,29 @@ def get_authors():
     return authors
 
 
-def get_books():
+def get_books(sort):
     """Return a list of all books in the database."""
-    books = Book.query.all()
-    print(books)
-    return books
+    if sort == 'author':
+        return Book.query.join(Author).order_by(Author.name).all()
+
+    return Book.query.order_by(Book.title).all()
 
 
 @app.route('/')
 def index():
-    return render_template('home.html', books=get_books())
+    """Show the home page and sort books by title (default) or author."""
+    sort = request.args.get('sort', 'title')
+
+    if sort not in ['title', 'author']:
+        return 'Invalid sort', 400
+
+    return render_template('home.html', books=get_books(sort), sort=sort)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
 def add_author():
     """Show the add-author form and handle new author submissions."""
     if request.method == 'POST':
-
         author = Author(
             name=request.form.get('name'),
             birth_date=request.form.get('birthdate', type=date.fromisoformat),
@@ -56,7 +62,6 @@ def add_book():
     authors = get_authors()
 
     if request.method == 'POST':
-
         book = Book(
             title=request.form.get('title'),
             isbn=request.form.get('isbn'),
@@ -67,9 +72,11 @@ def add_book():
         db.session.add(book)
         db.session.commit()
 
-        return render_template('add_book.html', message='Book added successfully!', current_year=current_year, authors=authors)
+        return render_template('add_book.html', message='Book added successfully!', current_year=current_year,
+                               authors=authors)
 
     return render_template('add_book.html', current_year=current_year, authors=authors)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
@@ -77,4 +84,3 @@ if __name__ == '__main__':
 # Run once to create the tables, then comment out again:
 # with app.app_context():
 #     db.create_all()
-
