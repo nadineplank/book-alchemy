@@ -18,6 +18,19 @@ def get_authors():
     authors = Author.query.all()
     return authors
 
+
+def get_books():
+    """Return a list of all books in the database."""
+    books = Book.query.all()
+    print(books)
+    return books
+
+
+@app.route('/')
+def index():
+    return render_template('home.html', books=get_books())
+
+
 @app.route('/add_author', methods=['GET', 'POST'])
 def add_author():
     """Show the add-author form and handle new author submissions."""

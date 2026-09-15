@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Book Alchemy Home</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
 
-    {% for book in books %}
-    <div> <h3>{{ book.title }}</h3>
-    </div>
-    {% endfor %}
+    <div class="book-grid">
+      {% for book in books %}
+        <div class="book_card">
+          <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="{{ book.title }} cover" class="book-cover" />
+          <p class="book-title">{{ book.title }}</p>
+          <p class="book-author">{{ book.author.name }}</p>
+        </div>
+      {% endfor %}
 
+  </div>
   </body>
 </html>
