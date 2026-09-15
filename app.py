@@ -1,7 +1,7 @@
 import os
 from datetime import date
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 from sqlalchemy import or_
 
 from data_models import db, Author, Book
@@ -10,14 +10,25 @@ app = Flask(__name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
-
+app.config['SECRET_KEY'] = os.urandom(24)
 db.init_app(app)
+
+
+@app.errorhandler(405)
+def method_not_allowed(e):
+    flash('This action requires a POST request. Please use the delete button.', 'error')
+    return redirect(url_for('index'))
 
 
 def get_authors():
     """Return a list of all authors in the database."""
     authors = Author.query.all()
     return authors
+
+def get_author_by_id(author_id):
+    """Return a single author from the database."""
+    author = Author.query.filter_by(id=author_id).first()
+    return author
 
 
 def get_books(sort, search=None):
@@ -37,6 +48,11 @@ def get_books(sort, search=None):
         query = query.order_by(Book.title)
 
     return query.all()
+
+
+def get_book_by_id(book_id):
+    """Return a single book from the database."""
+    return Book.query.filter_by(id=book_id).first()
 
 
 @app.route('/')
@@ -91,6 +107,30 @@ def add_book():
                                authors=authors)
 
     return render_template('add_book.html', current_year=current_year, authors=authors)
+
+
+@app.route('/book/<int:book_id>/delete', methods=['POST'])
+def delete_book(book_id):
+    """Delete a book from the database and if author has no more books, delete it."""
+    book = get_book_by_id(book_id)
+
+    if book is None:
+        flash('Book not found!', 'error')
+        return redirect(url_for('index'))
+
+    db.session.delete(book)
+
+    author = get_author_by_id(book.author_id)
+
+
+    if author is not None and len(author.books) == 0:
+        db.session.delete(author)
+
+    db.session.commit()
+
+    flash('Book deleted successfully!', 'success')
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
