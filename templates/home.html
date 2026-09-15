@@ -1,38 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>Book Alchemy Home</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  </head>
-  <body>
+</head>
+<body>
 
-    <div class="toolbar">
-      <label for="sort-select">
+<div class="toolbar">
+    <form action="/" method="GET" class="search-form">
+        <label for="search" class="search-label">Search</label>
+        <input type="text" id="search" name="search" class="search-input">
+        <button type="submit" class="search-button" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </button>
+    </form>
+
+
+    <label for="sort-select">
         Sort by
-      </label>
-      <select id="sort-select" class="sort-dropdown">
+    </label>
+    <select id="sort-select" class="sort-dropdown">
         <option value="title" {% if sort == "title" %}selected{% endif %}>Title</option>
         <option value="author" {% if sort == "author" %}selected{% endif %}>Author</option>
-      </select>
-    </div>
+    </select>
+</div>
 
+{% if books %}
     <div class="book-grid">
-      {% for book in books %}
-        <div class="book_card">
-          <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="{{ book.title }} cover" class="book-cover" />
-          <p class="book-title">{{ book.title }}</p>
-          <p class="book-author">{{ book.author.name }}</p>
-        </div>
-      {% endfor %}
+        {% for book in books %}
+            <div class="book_card">
+                <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="{{ book.title }} cover"
+                     class="book-cover"/>
+                <p class="book-title">{{ book.title }}</p>
+                <p class="book-author">{{ book.author.name }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <a class="go_back_link" href="/">&larr; Go Back</a>
+    <p class="no_result">No books found for "{{ search }}"</p>
+{% endif %}
 
-  </div>
-  <script>
-    document.getElementById('sort-select').addEventListener('change', function() {
-      window.location.href = '/?sort=' + this.value;
+<script>
+    document.getElementById('sort-select').addEventListener('change', function () {
+        window.location.href = '/?sort=' + this.value {% if search %} + '&search={{ search }}' {% endif %};
     });
-  </script>
-  </body>
+</script>
+</body>
 </html>

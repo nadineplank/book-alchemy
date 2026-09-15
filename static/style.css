@@ -1,8 +1,54 @@
 .toolbar {
   display: flex;
   justify-content: flex-end;
-  padding: 16px 24px 0;
   align-items: center;
+  padding: 16px 0;
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-right: 20px;
+}
+.search-label {
+  font-size: 1em;
+  color: #000;
+}
+
+.search-input,
+.search-button,
+.sort-dropdown {
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.search-input {
+  padding: 8px 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+
+.search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.search-button:hover,
+.sort-dropdown:hover {
+  border-color: #999;
 }
 
 .sort-dropdown {
@@ -10,21 +56,13 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
   padding: 8px 36px 8px 14px;
-  font-size: 0.9em;
-  color: #333;
   cursor: pointer;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23555'%3E%3Cpath d='M5.5 7l4.5 5 4.5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 12px;
   margin-left: 8px;
-}
-
-.sort-dropdown:hover {
-  border-color: #999;
 }
 
 .sort-dropdown:focus {
@@ -34,39 +72,54 @@
 }
 
 .book-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 24px;
-  padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 24px;
+    padding: 24px;
 }
 
 .book-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: left;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+    width: 100%;
 }
 
 .book-cover {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
-  display: block;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  margin-bottom: 8px;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    margin-bottom: 8px;
 }
 
 .book-title,
 .book-author {
-  width: 100%;
-  box-sizing: border-box;
-  margin: 4px 0 2px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 4px 0 2px;
 }
 
 .book-author {
-  color: #555;
-  font-size: 0.9em;
-  margin: 0;
+    color: #555;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.go_back_link {
+    color: #555;
+    text-decoration: none;
+    padding: 24px;
+
+}
+.go_back_link:hover {
+    color: #999999;
+}
+
+.no_result {
+    display: flex;
+    justify-content: center;
 }

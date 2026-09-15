@@ -2,6 +2,7 @@ import os
 from datetime import date
 
 from flask import Flask, render_template, request
+from sqlalchemy import or_
 
 from data_models import db, Author, Book
 
@@ -19,23 +20,37 @@ def get_authors():
     return authors
 
 
-def get_books(sort):
-    """Return a list of all books in the database."""
-    if sort == 'author':
-        return Book.query.join(Author).order_by(Author.name).all()
+def get_books(sort, search=None):
+    """Return a list of all books in the database, optionally filtered by search and sorted."""
+    query = Book.query.join(Author)
 
-    return Book.query.order_by(Book.title).all()
+    if search: query = query.filter(
+        or_(
+            Book.title.contains(search),
+            Author.name.contains(search)
+        )
+    )
+
+    if sort == 'author':
+        query = query.order_by(Author.name)
+    else:
+        query = query.order_by(Book.title)
+
+    return query.all()
 
 
 @app.route('/')
 def index():
     """Show the home page and sort books by title (default) or author."""
     sort = request.args.get('sort', 'title')
+    search = request.args.get('search')
 
     if sort not in ['title', 'author']:
         return 'Invalid sort', 400
 
-    return render_template('home.html', books=get_books(sort), sort=sort)
+    books = get_books(sort, search)
+
+    return render_template('home.html', books=books, sort=sort, search=search)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
