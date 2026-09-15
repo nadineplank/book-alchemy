@@ -1,32 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  </head>
-  <body>
+{% extends "base.html" %}
 
-  <form action="/add_book" method="POST">
+{% block title %}Add Book — Book Alchemy{% endblock %}
+
+{% block content %}
+
+<form action="{{ url_for('add_book') }}" method="POST">
     <label for="title">Book title:</label>
     <input type="text" id="title" name="title" required><br><br>
     <label for="isbn">ISBN:</label>
     <input type="text" id="isbn" name="isbn" maxlength="17" required><br><br>
     <label for="publication_year">Publication Year:</label>
-    <input type="number" id="publication_year" maxlength="4" name="publication_year" min="1000" max="{{ current_year }}" required><br><br>
+    <input type="number" id="publication_year" maxlength="4" name="publication_year" min="1000" max="{{ current_year }}"
+           required><br><br>
     <label for="author_id">Choose an author:</label>
     <select name="author_id" id="author_id">
-      <option value="">--Please choose an author--</option>
+        <option value="">--Please choose an author--</option>
         {% for author in authors %}
-          <option value="{{ author.id }}">{{ author.name }}</option>
+            <option value="{{ author.id }}">{{ author.name }}</option>
         {% endfor %}
     </select>
     <input type="submit" value="Add Book">
-  </form>
+</form>
 
-  {% if message %}
-    <p>{{ message }}</p>
-  {% endif %}
-
-  </body>
-</html>
+{% endblock %}

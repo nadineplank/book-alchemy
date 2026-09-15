@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Book Alchemy{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Home</a>
+  <a href="{{ url_for('add_author') }}" class="nav-link {% if request.endpoint == 'add_author' %}active{% endif %}">Add Author</a>
+  <a href="{{ url_for('add_book') }}" class="nav-link {% if request.endpoint == 'add_book' %}active{% endif %}">Add Book</a>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
