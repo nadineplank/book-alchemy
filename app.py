@@ -16,7 +16,21 @@ db.init_app(app)
 
 @app.errorhandler(405)
 def method_not_allowed(e):
-    flash('This action requires a POST request. Please use the delete button.', 'error')
+    flash('This action requires a POST request.', 'error')
+    return redirect(url_for('index'))
+
+
+@app.errorhandler(404)
+def not_found(e):
+    flash('Page not found.', 'error')
+    return redirect(url_for('index'))
+
+
+@app.errorhandler(500)
+def server_error(e):
+    db.session.rollback()
+    app.logger.error(f"Server error: {e}")
+    flash('An unexpected error occurred.', 'error')
     return redirect(url_for('index'))
 
 
@@ -24,6 +38,7 @@ def get_authors():
     """Return a list of all authors in the database."""
     authors = Author.query.all()
     return authors
+
 
 def get_author_by_id(author_id):
     """Return a single author from the database."""
@@ -73,6 +88,12 @@ def index():
 def add_author():
     """Show the add-author form and handle new author submissions."""
     if request.method == 'POST':
+
+        name = request.form.get('name', '').strip()
+        if not name:
+            flash('Author name is required.', 'error')
+            return render_template('add_author.html')
+
         author = Author(
             name=request.form.get('name'),
             birth_date=request.form.get('birthdate', type=date.fromisoformat),
