@@ -4,22 +4,35 @@
 
 {% block content %}
 
-<form action="{{ url_for('add_book') }}" method="POST">
-    <label for="title">Book title:</label>
-    <input type="text" id="title" name="title" required><br><br>
-    <label for="isbn">ISBN:</label>
-    <input type="text" id="isbn" name="isbn" maxlength="17" required><br><br>
-    <label for="publication_year">Publication Year:</label>
-    <input type="number" id="publication_year" maxlength="4" name="publication_year" min="1000" max="{{ current_year }}"
-           required><br><br>
-    <label for="author_id">Choose an author:</label>
-    <select name="author_id" id="author_id">
-        <option value="">--Please choose an author--</option>
-        {% for author in authors %}
-            <option value="{{ author.id }}">{{ author.name }}</option>
-        {% endfor %}
-    </select>
-    <input type="submit" value="Add Book">
-</form>
+    <form action="{{ url_for('add_book') }}" method="POST" class="page-form">
+        <div class="form-group">
+
+            <label for="title">Book title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" name="isbn" maxlength="17" required>
+        </div>
+
+        <div class="form-group">
+            <label for="publication_year">Publication Year</label>
+            <input type="number" id="publication_year" maxlength="4" name="publication_year" min="1000"
+                   max="{{ current_year }}"
+                   required>
+        </div>
+        <div class="form-group">
+
+            <label for="author_id">Choose an author</label>
+            <select name="author_id" id="author_id">
+                <option value="">--Please choose an author--</option>
+                {% for author in authors %}
+                    <option value="{{ author.id }}">{{ author.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="form-submit">Add Book</button>
+    </form>
 
 {% endblock %}
