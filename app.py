@@ -1,5 +1,6 @@
 import os
 from datetime import date
+from pathlib import Path
 
 from flask import Flask, flash, redirect, render_template, request, url_for
 from sqlalchemy import or_
@@ -9,8 +10,11 @@ from data_models import Author, Book, db
 
 app = Flask(__name__)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
+basedir = Path(__file__).resolve().parent
+database_path = basedir / 'data' / 'library.sqlite'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{database_path}"
+# For educational purposes only; otherwise, use an environment variable.
 app.config['SECRET_KEY'] = os.urandom(24)
 db.init_app(app)
 
