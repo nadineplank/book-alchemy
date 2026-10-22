@@ -1,3 +1,4 @@
+from sqlalchemy import Index
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -5,10 +6,20 @@ db = SQLAlchemy()
 
 class Author(db.Model):
     """Represents an author in the digital library."""
+
+    __table_args__ = (
+        Index(
+            'uq_author_name_nocase',
+            db.text('name COLLATE NOCASE'),
+            unique=True,
+        ),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     birth_date = db.Column(db.Date)
     date_of_death = db.Column(db.Date, nullable=True)
+
 
     def __repr__(self):
         """Return a representation of the Author instance."""

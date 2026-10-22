@@ -1,11 +1,11 @@
 import os
 from datetime import date
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, flash, redirect, render_template, request, url_for
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 
-from data_models import db, Author, Book
+from data_models import Author, Book, db
 
 app = Flask(__name__)
 
@@ -135,7 +135,7 @@ def add_author():
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
-            return form_error('Could not save author — please check your input.')
+            return form_error('An author with this name already exists.')
 
         flash('Author added successfully!', 'success')
         return redirect(url_for('index'))
