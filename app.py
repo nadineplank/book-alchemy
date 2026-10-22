@@ -21,18 +21,21 @@ db.init_app(app)
 
 @app.errorhandler(405)
 def method_not_allowed(e):
+    """Handle requests that use an unsupported HTTP method."""
     flash('This action requires a POST request.', 'error')
     return redirect(url_for('index'))
 
 
 @app.errorhandler(404)
 def not_found(e):
+    """Handle requests for pages that do not exist."""
     flash('Page not found.', 'error')
     return redirect(url_for('index'))
 
 
 @app.errorhandler(500)
 def server_error(e):
+    """Handle internal server errors and roll back the database session."""
     db.session.rollback()
     app.logger.error(f"Server error: {e}")
     flash('An unexpected error occurred.', 'error')
