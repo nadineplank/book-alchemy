@@ -1,5 +1,5 @@
-from sqlalchemy import Index
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Index
 
 db = SQLAlchemy()
 
@@ -35,7 +35,7 @@ class Book(db.Model):
     """Represents a book stored in the digital library."""
 
     id = db.Column(db.Integer, primary_key=True)
-    isbn = db.Column(db.String, nullable=False)
+    isbn = db.Column(db.String, unique=True, nullable=False)
     title = db.Column(db.String(255), unique=True, nullable=False, index=True)
     publication_year = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))

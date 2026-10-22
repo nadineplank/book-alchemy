@@ -166,6 +166,9 @@ def add_book():
         if not isbn:
             return form_error('ISBN is required.')
 
+        if Book.query.filter_by(isbn=isbn).first():
+            return form_error('Book with this ISBN already exists.')
+
         if publication_year is None or not (1000 <= publication_year <= current_year):
             return form_error(f'Publication year must be between 1000 and {current_year}.')
 
@@ -173,10 +176,10 @@ def add_book():
             return form_error('Please choose a valid author.')
 
         book = Book(
-            title=request.form.get('title'),
-            isbn=request.form.get('isbn'),
-            publication_year=request.form.get('publication_year', type=int),
-            author_id=request.form.get('author_id', type=int)
+            title=title,
+            isbn=isbn,
+            publication_year=publication_year,
+            author_id=author_id
         )
         db.session.add(book)
 
