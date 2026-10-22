@@ -19,6 +19,7 @@ class Author(db.Model):
     name = db.Column(db.String(120), nullable=False)
     birth_date = db.Column(db.Date)
     date_of_death = db.Column(db.Date, nullable=True)
+    books = db.relationship('Book', back_populates='author')
 
 
     def __repr__(self):
@@ -39,7 +40,7 @@ class Book(db.Model):
     title = db.Column(db.String(255), unique=True, nullable=False, index=True)
     publication_year = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
-    author = db.relationship('Author', backref='books')
+    author = db.relationship('Author', back_populates='books')
 
     def __repr__(self):
         """Return a representation of the Book instance."""
